@@ -44,7 +44,13 @@ Additional Considerations
 * Expiration Date: Verify the expiration date of your new certificate to ensure it is correct and that it has been properly renewed.
 By following these steps, you should be able to renew and install your SSL certificate, ensuring continued secure communications for your website or service.
 
-You can use the Command Prompt to uninstall HP Sure Click if the standard uninstall method is unavailable.
+
+
+
+
+
+
+{You can use the Command Prompt to uninstall HP Sure Click if the standard uninstall method is unavailable.
 
 Open Command Prompt as Administrator:
 
