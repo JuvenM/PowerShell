@@ -1,0 +1,87 @@
+Https://fast.com
+
+(Looping command)
+Yes >/dev/null
+
+(Shutdown cause)(Sierra or above)
+log show —predicate ‘eventMessage contains “shutdown cause:”’
+
+(Disk utility)
+diskutil list
+diskutil unmountDisk disk#
+diskutil zerodisk disk#
+Control + C
+
+(File System Check)(in Single user mode)
+fsck -fy
+
+(Make Fusion Drive)
+diskutil list
+diskutil cs create Macintosh\ HD disk0 disk1
+diskutil cs list
+diskutil cs createVolume (logicalvolumegroup) jhfs+ Macintosh\ HD 100%
+
+diskutil resetFusion
+
+(Show hidden folders)
+defaults write com.apple.finder AppleShowAllFiles YES
+
+(To hide folders)
+defaults write com.apple.finder AppleShowAllFiles FALSE
+
+(Restart Finder)
+killall Finder
+
+(Find Mac OS X version)
+sw_vers
+
+(Find Mac Serial Number)
+ioreg -l | grep IOPlatformSerialNumber
+
+(Permanently hide/unhide items)
+chflags -v -R -L nohidden
+chflags -v -R -L hidden
+
+(Check SMART status)
+Diskutil info disk1 | grep SMART
+
+To install home brew in terminal : 
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+Then run : 
+
+(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/juven.moodley/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+
+Then run :
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+Then : “brew help” ———> then “pwsh”
+
+(Sync AD to AD azure)
+Start-ADSyncSyncCycle -PolicyType Delta
+
+(Load ExchangeOnline module)
+Import-Module ExchangeOnlineManagement
+
+(Connect to exchange online with authentication)
+Connect-ExchangeOnline -UserPrincipalName navin@contoso.onmicrosoft.com
+
+(Disconnect session)
+Disconnect-ExchangeOnline
+
+(Show all room lists in exchange online powershell)
+Get-DistributionGroup -ResultSize Unlimited | `
+Where {$_.RecipientTypeDetails -eq "RoomList"} | `
+Format-Table DisplayName,Identity,PrimarySmtpAddress –AutoSize
+
+(List of hidden mailboxes from GAL)
+Get-Mailbox -ResultSize Unlimited -Filter {HiddenFromAddressListsEnabled -eq $True}
+
+(Create a Room List)
+New-DistributionGroup -Name "Building 32 Conference Rooms" -OrganizationalUnit "contoso.com/rooms" -RoomList
+
+(Add room mailbox to room list)
+Add-DistributionGroupMember -Identity "Building 32 Conference Rooms" -Member confroom3223@contoso.com
