@@ -85,3 +85,45 @@ New-DistributionGroup -Name "Building 32 Conference Rooms" -OrganizationalUnit "
 
 (Add room mailbox to room list)
 Add-DistributionGroupMember -Identity "Building 32 Conference Rooms" -Member confroom3223@contoso.com
+
+
+
+
+
+
+(Elevate permissions to output file in power/exchange online)
+
+Example Command with Elevated Permissions
+If you’re running a PowerShell script and want to ensure it has the necessary permissions, you can use the following approach:
+
+Script Example
+powershell
+Copy code
+$filePath = "C:\Users\Compnow\Desktop\Users\output.txt"
+$content = "This is a test output."
+
+# Check if running as Administrator
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
+{
+    # Re-run the script with elevated permissions
+    Start-Process powershell -ArgumentList "-File `"$PSCommandPath`"" -Verb RunAs
+    exit
+}
+
+# Write the output to the file
+Set-Content -Path $filePath -Value $content
+Command to Output a File
+If you want to try a simpler command, run PowerShell as an administrator and use the Set-Content cmdlet to write to the file:
+
+powershell
+Copy code
+Set-Content -Path "C:\Users\Compnow\Desktop\Users\output.txt" -Value "This is a test output."
+Verifying Permissions
+Check Current User Permissions:
+To verify the current user permissions on the directory, you can use the following PowerShell command:
+powershell
+Copy code
+$acl = Get-Acl "C:\Users\Compnow\Desktop\Users"
+$acl.Access
+This will list the access control entries (ACEs) for the directory, showing the permissions granted to each user and group.
+By following these methods, you should be able to resolve the "Access to the path is denied" error and successfully output files using PowerShell.
