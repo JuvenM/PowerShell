@@ -84,3 +84,22 @@ Always ensure you have the necessary administrative privileges when using symhel
 Backup your current SYM configuration before making any changes to avoid accidental data loss or misconfiguration.
 Refer to the official documentation or help command (symhelper --help) for additional options and detailed usage instructions.
 By following these steps, you should be able to effectively manage packages and policies using symhelper in Setup My Mac.
+
+
+
+{Script for Jamf Pro to remove application}
+
+app_name="TeamViewer.app"
+app_path="/Applications/$app_name"
+
+if [ -d "$app_path" ]; then
+    rm -rf "$app_path"
+    echo "$app_name has been removed."
+else
+    echo "$app_name is not installed."
+fi
+
+exit 0
+
+
+
