@@ -86,7 +86,8 @@ New-DistributionGroup -Name "Building 32 Conference Rooms" -OrganizationalUnit "
 (Add room mailbox to room list)
 Add-DistributionGroupMember -Identity "Building 32 Conference Rooms" -Member confroom3223@contoso.com
 
-
+(Check status of managed folder assistant)
+Get-MailboxServer | Get-ManagedFolderAssistant | Select-Object Identity,WorkCycle,StartTime,Status
 
 
 
@@ -127,3 +128,4 @@ $acl = Get-Acl "C:\Users\Compnow\Desktop\Users"
 $acl.Access
 This will list the access control entries (ACEs) for the directory, showing the permissions granted to each user and group.
 By following these methods, you should be able to resolve the "Access to the path is denied" error and successfully output files using PowerShell.
+
