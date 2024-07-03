@@ -86,8 +86,12 @@ New-DistributionGroup -Name "Building 32 Conference Rooms" -OrganizationalUnit "
 (Add room mailbox to room list)
 Add-DistributionGroupMember -Identity "Building 32 Conference Rooms" -Member confroom3223@contoso.com
 
-(Check status of managed folder assistant)
-Get-MailboxServer | Get-ManagedFolderAssistant | Select-Object Identity,WorkCycle,StartTime,Status
+(Start Managed Folder Assistant on Mailbox)
+Start-ManagedFolderAssistant -Identity morris.cornejo@contoso.com
+
+(Check Managed Folder logs on mailbox)
+[xml]$diag = (Export-MailboxDiagnosticLogs joe@mailbox.com -ExtendedProperties).MailboxLog
+$diag.Properties.MailboxTable.Property | ? {$_.Name -like "ELC*"}
 
 
 
