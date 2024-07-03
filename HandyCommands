@@ -94,6 +94,44 @@ Start-ManagedFolderAssistant -Identity morris.cornejo@contoso.com
 $diag.Properties.MailboxTable.Property | ? {$_.Name -like "ELC*"}
 
 
+(REmove old copies of files in Sharepoint to free up storage)
+
+# Install the PnP PowerShell module if not already installed
+if (-not (Get-Module -ListAvailable -Name PnP.PowerShell)) {
+    Install-Module -Name PnP.PowerShell -Force -AllowClobber
+}
+
+# Import the PnP PowerShell module
+Import-Module PnP.PowerShell
+
+# Connect to the SharePoint site using interactive login for MFA support
+$siteUrl = "https://cedarwoodscrm.sharepoint.com/sites/changeme"
+Connect-PnPOnline -Url $siteUrl -Interactive
+
+# Get the root folder of the SharePoint site
+$rootFolder = Get-PnPFolder -Url "/sites/changeme/changeme-two"
+
+# Get all the files in the root folder
+$files = Get-PnPFolderItem -FolderSiteRelativeUrl $rootFolder.ServerRelativeUrl -ItemType File
+
+# Iterate through each file and delete all versions but the latest 10
+foreach ($file in $files) {
+    $fileVersions = Get-PnPFileVersion -Url $file.ServerRelativeUrl
+
+    # Sort the versions by creation date, descending
+    $versions = $fileVersions | Sort-Object -Property Created -Descending
+
+    # Keep the latest 10 versions and delete the rest
+    $versionsToDelete = $versions | Select-Object -Skip 10
+    foreach ($versionToDelete in $versionsToDelete) {
+        Remove-PnPFileVersion -Url $file.ServerRelativeUrl -Identity $versionToDelete.Id
+    }
+}
+
+# Disconnect from the SharePoint site
+Disconnect-PnPOnline
+
+
 
 
 (Elevate permissions to output file in power/exchange online)
