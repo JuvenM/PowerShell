@@ -179,3 +179,20 @@ Start-ManagedFolderAssistant -Identity morris.cornejo@contoso.com
 (Check Managed Folder logs on mailbox)
 [xml]$diag = (Export-MailboxDiagnosticLogs joe@mailbox.com -ExtendedProperties).MailboxLog
 $diag.Properties.MailboxTable.Property | ? {$_.Name -like "ELC*"}
+
+
+(Uninstall application if blocked by policy)
+# To pull Identifying Number of application to remove 
+Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "*FortiClient*" } | Select-Object Name, IdentifyingNumber
+
+# To remove the application after getting the ID number
+$fortiClient = Get-WmiObject -Class Win32_Product | Where-Object { $_.Name -like "*FortiClient*" }
+if ($fortiClient) {
+    $productCode = $fortiClient.IdentifyingNumber
+    Start-Process -FilePath "msiexec.exe" -ArgumentList "/x $productCode /qn /norestart" -Wait
+} else {
+    Write-Output "FortiClient not found."
+}
+
+
+
