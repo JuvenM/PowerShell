@@ -196,3 +196,27 @@ if ($fortiClient) {
 
 
 
+(Add Alias email to all user mailboxes via PowerShell/Exchange)
+
+Install-Module -Name ExchangeOnlineManagement -Force -AllowClobber
+Import-Module ExchangeOnlineManagement
+Connect-ExchangeOnline -UserPrincipalName youradmin@yourdomain.com -ShowProgress $true
+$users = Get-Mailbox -ResultSize Unlimited
+$domain = "handyfinance.com.au"
+$counter = 0
+$total = $users.Count
+
+foreach ($user in $users) {
+    $counter++
+    $alias = $user.Alias + "@" + $domain
+    $emailAddresses = $user.EmailAddresses
+    $emailAddresses += "smtp:$alias"
+    
+    Set-Mailbox -Identity $user.Alias -EmailAddresses $emailAddresses
+
+    Write-Progress -Activity "Adding alias to mailboxes" -Status "Processing $counter out of $total" -PercentComplete (($counter / $total) * 100)
+}
+
+Write-Output "Aliases added to all user mailboxes."
+Disconnect-ExchangeOnline -Confirm:$false
+
